@@ -1,3 +1,4 @@
+tengo este openapi.yml
 openapi: 3.0.0
 info:
   title: API de Avales
@@ -341,3 +342,18 @@ paths:
           description: ID de disciplina no válido.
         "500":
           description: Error al eliminar la disciplina.
+components:
+  schemas:
+    Disciplina:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
