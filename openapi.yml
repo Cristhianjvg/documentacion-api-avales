@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: API de Avales
-  version: 0.1.0
+  title: Mi API
+  version: 1.0.0
   description: API para manejar documentos de avales.
 servers:
   - url: https://avales-web.vercel.app/ # Cambia esto por la URL base de tu API
