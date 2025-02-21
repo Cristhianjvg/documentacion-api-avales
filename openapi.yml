@@ -6,15 +6,37 @@ info:
 servers:
   - url: https://avales-web.vercel.app/ # Cambia esto por la URL base de tu API
     description: Servidor local
+tags:
+  - name: Usuarios
+    description: Operaciones relacionadas con los usuarios
+  - name: Roles
+    description: Operaciones relacionadas con los roles
 paths:
-  /api/auth/login:
+  /api/usuarios:
+    get:
+      summary: Obtener usuarios
+      description: Obtiene una lista paginada de usuarios o un usuario específico por ID.
+      parameters:
+        - name: id
+          in: query
+          description: ID del usuario a buscar
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Número de página para la paginación
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de usuarios obtenida correctamente
+        "400":
+          description: Error en los parámetros de entrada
+        "404":
+          description: Usuario no encontrado
     post:
-      summary: Iniciar sesión
-      description: |
-        Recibe un email y un password, verifica las credenciales y devuelve un JSON Web Token (JWT) si son válidas.
-        - Si el usuario no existe, devuelve un error 404.
-        - Si la contraseña es incorrecta, devuelve un error 401.
-        - Si hay un error interno del servidor, devuelve un error 500.
+      summary: Crear un nuevo usuario
+      description: Crea un nuevo usuario con los datos proporcionados.
       requestBody:
         required: true
         content:
@@ -24,133 +46,159 @@ paths:
               properties:
                 email:
                   type: string
-                  format: email
-                  example: usuario@ejemplo.com
-                  description: El email del usuario.
                 password:
                   type: string
-                  format: password
-                  example: contraseña123
-                  description: La contraseña del usuario.
-              required:
-                - email
-                - password
+                nombre:
+                  type: string
+                apellido:
+                  type: string
+                cedula:
+                  type: string
+                categoria_id:
+                  type: integer
+                disciplina_id:
+                  type: integer
+                roles:
+                  type: array
+                  items:
+                    type: integer
       responses:
-        "200":
-          description: Inicio de sesión exitoso. Devuelve un JWT.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-                    description: Token JWT para autenticar al usuario.
-        "401":
-          description: Contraseña incorrecta.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Contraseña incorrecta
-                    description: Mensaje de error indicando que la contraseña es incorrecta.
-        "404":
-          description: Usuario no encontrado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Usuario no encontrado
-                    description: Mensaje de error indicando que el usuario no existe.
-        "500":
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Error interno del servidor
-                    description: Mensaje de error genérico para errores del servidor.
-  /api/usuarios:
-    get:
-      summary: Obtener la lista de usuarios paginada
-      description: Retorna una lista de usuarios con paginación de 10 por página, ordenados por apellido ascendente.
+        "201":
+          description: Usuario creado correctamente
+        "400":
+          description: Error en los datos enviados
+  /api/usuarios/{id}:
+    put:
+      summary: Actualizar un usuario
+      description: Actualiza un usuario existente por su ID.
       parameters:
-        - name: page
-          in: query
-          description: Número de la página a obtener (por defecto 1).
-          required: false
+        - name: id
+          in: path
+          required: true
           schema:
             type: integer
-            default: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                nombre:
+                  type: string
+                apellido:
+                  type: string
+                cedula:
+                  type: string
+                categoria_id:
+                  type: integer
+                disciplina_id:
+                  type: integer
+                roles:
+                  type: array
+                  items:
+                    type: integer
       responses:
         "200":
-          description: Lista de usuarios paginada y ordenada.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  page:
-                    type: integer
-                    description: Página actual.
-                  totalPages:
-                    type: integer
-                    description: Número total de páginas.
-                  totalUsuarios:
-                    type: integer
-                    description: Número total de usuarios en la base de datos.
-                  usuarios:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          description: ID único del usuario.
-                        email:
-                          type: string
-                          format: email
-                          description: Correo electrónico del usuario.
-                        nombre:
-                          type: string
-                          description: Nombre del usuario.
-                        apellido:
-                          type: string
-                          description: Apellido del usuario.
-                        cedula:
-                          type: string
-                          description: Número de cédula del usuario.
-                        categoria_id:
-                          type: integer
-                          description: ID de la categoría del usuario.
-                        disciplina_id:
-                          type: integer
-                          description: ID de la disciplina del usuario.
-                        created_at:
-                          type: string
-                          format: date-time
-                          description: Fecha de creación del usuario.
-                        updated_at:
-                          type: string
-                          format: date-time
-                          description: Fecha de última actualización del usuario.
-        "500":
-          description: Error interno del servidor.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Mensaje de error.
+          description: Usuario actualizado correctamente
+        "400":
+          description: Error en los datos enviados
+    delete:
+      summary: Eliminar un usuario
+      description: Elimina un usuario por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Usuario eliminado correctamente
+        "400":
+          description: Error en la petición
+  /api/roles:
+    get:
+      summary: Obtener roles
+      description: Obtiene una lista paginada de roles o un rol específico por ID.
+      parameters:
+        - name: id
+          in: query
+          description: ID del rol a buscar
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Número de página para la paginación
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lista de roles obtenida correctamente
+        "400":
+          description: Error en los parámetros de entrada
+        "404":
+          description: Rol no encontrado
+    post:
+      summary: Crear un nuevo rol
+      description: Crea un nuevo rol con los datos proporcionados.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        "201":
+          description: Rol creado correctamente
+        "400":
+          description: Error en los datos enviados
+  /api/roles/{id}:
+    put:
+      summary: Actualizar un rol
+      description: Actualiza un rol existente por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                descripcion:
+                  type: string
+      responses:
+        "200":
+          description: Rol actualizado correctamente
+        "400":
+          description: Error en los datos enviados
+    delete:
+      summary: Eliminar un rol
+      description: Elimina un rol por su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Rol eliminado correctamente
+        "400":
+          description: Error en la petición
