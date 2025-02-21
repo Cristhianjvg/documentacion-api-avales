@@ -13,10 +13,11 @@ tags:
     description: Operaciones relacionadas con los roles
 paths:
   /api/usuarios:
+    tags:
+      - Usuarios
     get:
       summary: Obtener usuarios
-      tags:
-        - Usuarios
+
       description: Obtiene una lista paginada de usuarios o un usuario específico por ID.
       parameters:
         - name: id
