@@ -13,11 +13,10 @@ tags:
     description: Operaciones relacionadas con los roles
 paths:
   /api/usuarios:
-    tags:
-      - Usuarios
     get:
       summary: Obtener usuarios
-
+      tags:
+        - Usuarios
       description: Obtiene una lista paginada de usuarios o un usuario específico por ID.
       parameters:
         - name: id
@@ -39,6 +38,8 @@ paths:
           description: Usuario no encontrado
     post:
       summary: Crear un nuevo usuario
+      tags:
+        - Usuarios
       description: Crea un nuevo usuario con los datos proporcionados.
       requestBody:
         required: true
@@ -73,6 +74,8 @@ paths:
   /api/usuarios/{id}:
     put:
       summary: Actualizar un usuario
+      tags:
+        - Usuarios
       description: Actualiza un usuario existente por su ID.
       parameters:
         - name: id
@@ -112,6 +115,8 @@ paths:
           description: Error en los datos enviados
     delete:
       summary: Eliminar un usuario
+      tags:
+        - Usuarios
       description: Elimina un usuario por su ID.
       parameters:
         - name: id
@@ -127,6 +132,8 @@ paths:
   /api/roles:
     get:
       summary: Obtener roles
+      tags:
+        - Roles
       description: Obtiene una lista paginada de roles o un rol específico por ID.
       parameters:
         - name: id
@@ -148,6 +155,8 @@ paths:
           description: Rol no encontrado
     post:
       summary: Crear un nuevo rol
+      tags:
+        - Roles
       description: Crea un nuevo rol con los datos proporcionados.
       requestBody:
         required: true
@@ -168,6 +177,8 @@ paths:
   /api/roles/{id}:
     put:
       summary: Actualizar un rol
+      tags:
+        - Roles
       description: Actualiza un rol existente por su ID.
       parameters:
         - name: id
@@ -193,6 +204,8 @@ paths:
           description: Error en los datos enviados
     delete:
       summary: Eliminar un rol
+      tags:
+        - Roles
       description: Elimina un rol por su ID.
       parameters:
         - name: id
